@@ -1,4 +1,5 @@
-
+library("data.table")
+setwd("/gpfs/ts0/scratch/gn261/Nimhams/mQTL/")
 tab<-matrix(data = NA, nrow = 22, ncol = 8)
 colnames(tab)<-c("nmQTLs", "nmQTLs_PCs", "overlap", "mean effect mQTLs", "mean effect mQTLs with PCs", "mean effect overlap mQTLs", "mean effect mQTLs not with PCs", "mean effect mQTLs only with PCs")
 
@@ -16,6 +17,9 @@ for(chr in 1:22){
 	tab[chr,5]<-mean(abs(tmp.2$beta))
 	tab[chr,6]<-mean(abs(tmp$beta[paste(tmp$SNP, tmp$gene) %in% paste(tmp.2$SNP, tmp.2$gene)]))
 	tab[chr,7]<-mean(abs(tmp$beta[!paste(tmp$SNP, tmp$gene) %in% paste(tmp.2$SNP, tmp.2$gene)]))
-	tab[chr,8]<-mean(abs(tmp.2[!paste(tmp.2$SNP, tmp.2$gene) %in% paste(tmp$SNP, tmp$gene),]))
+	tab[chr,8]<-mean(abs(tmp.2$beta[!paste(tmp.2$SNP, tmp.2$gene) %in% paste(tmp$SNP, tmp$gene)]))
 	
-write.table(tab, file = "/gpfs/ts0/scratch/gn261/NIMHAMS/mQTL/Output/Cerebellum_mQTL.txt")
+}
+	
+write.table(tab, file = "/gpfs/ts0/scratch/gn261/Nimhams/mQTL/Output/Frontal_mQTL.txt")
+
