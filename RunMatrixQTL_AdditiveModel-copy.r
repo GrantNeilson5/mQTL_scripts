@@ -7,6 +7,7 @@ library(MatrixEQTL, lib.loc = '/gpfs/ts0/home/gn261/.conda/envs/mqtl_env/lib/R/l
 base.dir = find.package("MatrixEQTL")
 useModel = modelLINEAR; # modelANOVA or modelLINEAR or modelLINEAR_CROSS 
 
+## This should be changed to cov_with10PCs and run again so the model is run both with and without PCs
 covariates_file_name = "/gpfs/ts0/scratch/gn261/Nimhams/mQTL/cov_agesex.txt";
 
 ##load covariate data
@@ -40,6 +41,7 @@ snps$LoadFile(SNP_file_name);
 print('-----------------------------   LOADED SNP DATA -------------------------------------')
 expression_file_name<-"/gpfs/ts0/scratch/gn261/Nimhams/Ind_Methylation.txt"
 
+## This should aslo be changed for second run through so output files are different	
 #gene_location_file_name = paste(base.dir, "/data/geneloc.txt", sep="");
 ## if no covariates set to  character()
 output_file_name = paste("mQTL/Output/Ind_chr", chr, ".txt", sep = "")
