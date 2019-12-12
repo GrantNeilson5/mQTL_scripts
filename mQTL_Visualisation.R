@@ -29,9 +29,12 @@ for (i in 2:22){
 }
 
 
-
+## Adding Bonf correction
 all_chr$bonf_corrected_p.value <- p.adjust(all_chr$p.value, method = "bonferroni")
+
+
 #### SNP and DNAm Site location visualisation #####
+
 ##Add CPG annotation data
 epicManifest <- read.csv("/gpfs/ts0/scratch/and202/NIMHAMS/epicManifest_hg38.csv", 
                          stringsAsFactors = F, header = T, sep =" ")

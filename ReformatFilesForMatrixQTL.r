@@ -62,7 +62,10 @@ dat <- dat[,which(colnames(dat) %in% rownames(pheno))]
 write.table(dat, "Ind_Methylation.txt", sep = "\t", quote = FALSE)
 write.table(epicManifest[,c("IlmnID", "CHR", "MAPINFO")], "Ind_Methylation_Info.txt", sep = "\t", quote = FALSE)
 
-#PCA??
+## plotting PCA of samples to make sure there are no massive outpliers, if there are remove them
+##Make PCA's on seperate, script (mqtl_PCA.txt) which does it in plink
+#this can then be plotted using the following code, to check for any outliers which should be removed prior to analysis
+
 pcs<-read.table("/gpfs/ts0/scratch/and202/NIMHAMS/nimhams2.pca.eigenvec")
 pcs$V2 <- as.character(pcs$V2)
 #there are some outliers so remove these - most likelt the samples that are not in pheno
