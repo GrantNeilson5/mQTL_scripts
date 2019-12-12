@@ -33,6 +33,15 @@ for (i in 2:22){
 all_chr$bonf_corrected_p.value <- p.adjust(all_chr$p.value, method = "bonferroni")
 
 
+#remove _* from SNP column so it can be matched to the manifest file
+all_chr$SNP <- gsub("_A", "", all_chr$SNP)
+all_chrSNP <- gsub("_T", "", all_chr$SNP)
+all_chr$SNP <- gsub("_G", "", all_chr$SNP)
+all_chr$SNP <- gsub("_C", "", all_chr$SNP)
+
+#Make an all chromosome Master which will not have any valsued removed from it
+all_chr_m <- all_chr
+
 #### SNP and DNAm Site location visualisation #####
 
 ##Add CPG annotation data
@@ -55,14 +64,10 @@ all_chr <- meth.all
 meth.all <- select(meth.all, SNP, CHR, MAPINFO)
 
 ##Add SNP annotation
-genotypeManifest <- read.csv("/gpfs/ts0/scratch/gn261/Nimhams/GSA-24v2-0_A2.csv")
+genotypeManifest <- read.csv("/gpfs/ts0/scratch/gn261/Nimhams/Infinium_Global_Screening-24_v2.0_manifest.csv")
 
-all_chr$SNP <- gsub("_A", "", all_chr$SNP)
-all_chrSNP <- gsub("_T", "", all_chr$SNP)
-all_chr$SNP <- gsub("_G", "", all_chr$SNP)
-all_chr$SNP <- gsub("_C", "", all_chr$SNP)
 
-snps.all <- cbind(all_chr, genotypeManifest[match(all_chr$SNP, genotypeManifest$Name), 
+snps.all <- cbind(all_chr_m, genotypeManifest[match(all_chr_m$SNP, genotypeManifest$Name), 
                                            c("Chr", "MapInfo")])
 
 all_chr <- cbind(all_chr, genotypeManifest[match(all_chr$SNP, genotypeManifest$Name), 
@@ -123,7 +128,6 @@ axis(2, at = c(-1,seq(0.5,21.5, by = 1), 23), c("", 1:22, ""), cex.axis = 1, las
 points(points.x[length(points.x):1], points.y[length(points.x):1], pch = 15, cex =0.75, col = points.col[length(points.x):1])
 
 
-
 ### plot legend
 par(op)
 plot(as.numeric(logP_col_palette[,1]), rep(1, nrow(logP_col_palette)), col = logP_col_palette[,2], pch = 15, cex = 1, axes = FALSE, main  = "", ylab = "", ylim = c(0.9999,1.001),xlab = "", cex.lab = 1, cex.axis = 1, cex.main = 1, adj = 0)
@@ -132,14 +136,14 @@ dev.off()
 
 
 ## calculate distance between SNP and methylation probe
-dist<-abs(all_chr$MAPINFO)
+dist<-abs(all_chr$MapInfo-all_chr$MAPINFO)
 dist[which(as.character(all_chr$Chr) != as.character(all_chr$CHR))]<--9
 
 
 par(op)
 pdf("Distnace_of_betweenmQTLS.pdf")
-signedDist<-(all_chr$MAPINFO)/1000
+signedDist<-(all_chr$MapInfo-all_chr$MAPINFO)/1000
 plot(signedDist[which(dist != -9)], abs(all_chr$beta[which(dist != -9)])*100, main = "", xlab = "Distance (Mb)", ylab = "Effect size (% difference in DNA methylation per minor allele)", pch = 16, cex = 0.8, ylim = c(-0,40), xlim = c(-500,500), cex.axis = 1, cex.lab = 0.8, axes = FALSE, xaxs = "i", yaxs = "i")
 axis(1, seq(-1, 1, 0.5), at = seq(-1000, 1000, 500), cex.axis = 1, cex.lab = 1)
 axis(2, las = 2, cex.axis = 1, cex.lab = 1)
- dev.off()
+dev.off()
