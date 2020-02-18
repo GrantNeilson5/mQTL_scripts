@@ -46,7 +46,7 @@ all_chr_m <- all_chr
 
 ##Add CPG annotation data
 epicManifest <- read.csv("/gpfs/ts0/scratch/and202/NIMHAMS/epicManifest_hg38.csv", 
-                         stringsAsFactors = F, header = T, sep =" ")
+                         stringsAsFactors = F, header = T)
 
 
 
@@ -61,7 +61,8 @@ meth.all<-meth.all[which(!is.na(meth.all$CHR)),] #5416 to 5416
 meth.all$CHR<-as.numeric(as.character(meth.all$CHR))
 
 all_chr <- meth.all
-meth.all <- select(meth.all, SNP, CHR, MAPINFO)
+myvars <- c("SNP", "CHR", "MAPINFO")
+meth.all <- meth.all[myvars]
 
 ##Add SNP annotation
 genotypeManifest <- read.csv("/gpfs/ts0/scratch/gn261/Nimhams/Infinium_Global_Screening-24_v2.0_manifest.csv")
@@ -76,7 +77,8 @@ all_chr <- cbind(all_chr, genotypeManifest[match(all_chr$SNP, genotypeManifest$N
 snps.all <-snps.all[which(!is.na(snps.all$Chr)),] #8071 to 5632
 snps.all$Chr<-as.numeric(as.character(snps.all$Chr))
 
-snps.all <- select(snps.all, SNP, Chr, MapInfo )
+myvars1 <- c("SNP", "Chr", "MapInfo")
+snps.all <- snps.all[myvars1]
 
 chrEnd.meth<-vector(length = 22)
 chrEnd.snps<-vector(length = 22)
@@ -116,7 +118,7 @@ logP<-abs(all_chr$beta)
 
 logP_col_palette<-cbind(seq(from = 0, to = 0.61, by = 0.01) , colorRampPalette(c("tan1", "orange",  "red", "red3", "red4",  "darkred"))(62))
 
-pdf("MQTL.pdf")
+pdf("MQTL_frontal.pdf")
 layout(matrix(c(1,2), ncol = 1), height = c(1,0.1))
 op <- par(oma=c(5,7,1,1))
 par(op)
@@ -141,7 +143,7 @@ dist[which(as.character(all_chr$Chr) != as.character(all_chr$CHR))]<--9
 
 
 par(op)
-pdf("Distnace_of_betweenmQTLS.pdf")
+pdf("Distnace_of_betweenmQTLS_frontal.pdf")
 signedDist<-(all_chr$MapInfo-all_chr$MAPINFO)/1000
 plot(signedDist[which(dist != -9)], abs(all_chr$beta[which(dist != -9)])*100, main = "", xlab = "Distance (Mb)", ylab = "Effect size (% difference in DNA methylation per minor allele)", pch = 16, cex = 0.8, ylim = c(-0,40), xlim = c(-500,500), cex.axis = 1, cex.lab = 0.8, axes = FALSE, xaxs = "i", yaxs = "i")
 axis(1, seq(-1, 1, 0.5), at = seq(-1000, 1000, 500), cex.axis = 1, cex.lab = 1)

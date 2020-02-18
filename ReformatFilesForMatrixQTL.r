@@ -1,10 +1,9 @@
-setwd("/gpfs/ts0/scratch/and202/NIMHAMS/")
+setwd("/gpfs/ts0/scratch/gn261/Nimhams/")
 
-load("NIMHAM_CER_Normalised_snpsremoved.rdat")
-betasc <- betas
+load("/gpfs/ts0/scratch/and202/NIMHAMS/NIMHAM_FPC_Normalised_snpsremoved.rdat")
+betasf <- betas
 
-pheno <- phenoc
-betas <-  betasc
+pheno <- phenof
 
 crosshyb<-read.table("/gpfs/ts0/scratch/and202/EPIC_reference/CrossHydridisingProbes_McCartney.txt", stringsAsFactors = FALSE)
 tofilter<-read.csv("/gpfs/ts0/scratch/and202/EPIC_reference/EPICArrayProbesToFilter.csv", stringsAsFactors = FALSE)
@@ -37,9 +36,11 @@ write.table(cbind(paste(pheno$Sample_Name, pheno$Sample_Name, sep = "_"),
             "DNAmSamples.txt", row.names = FALSE, col.names = FALSE, quote = FALSE)
 
 chr<-22
-geno<-read.table(paste("mQTL/Ind_maf_geno_mind_hwe_chr", chr, ".raw", sep = ""), header = T, stringsAsFactors = FALSE)
-geno.map<-read.table(paste("mQTL/Ind_maf_geno_mind_hwe_chr", chr, ".bim", sep = ""), stringsAsFactors = FALSE)
+geno<-read.table(paste("/gpfs/ts0/scratch/and202/NIMHAMS/mQTL/Ind_maf_geno_mind_hwe_chr", chr, ".raw", sep = ""), header = T, stringsAsFactors = FALSE)
+geno.map<-read.table(paste("/gpfs/ts0/scratch/and202/NIMHAMS/mQTL/Ind_maf_geno_mind_hwe_chr", chr, ".bim", sep = ""), stringsAsFactors = FALSE)
 colnames(geno.map)<-c("Chr", "id", "cm", "bp", "A1", "A2")
+
+geno$IID <- gsub("c","f", geno$IID)
 
 ### match methylation & genotypes files
 ##The genotype file contains 48 samples which means the failed qc samples have not been used
